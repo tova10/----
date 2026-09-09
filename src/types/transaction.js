@@ -13,4 +13,5 @@
  * @property {"income"|"expense"} type - סוג התנועה (הכנסה או הוצאה)
  * @property {Array<string>} emptyDetails - רשימת שדות ריקים (למשל אם אין מספר חשבון או תיאור)
  * @property {string} fileName - שם הקובץ שממנו נלקחה התנועה
+ * @property {string} description - תיאור התנועה (למשל "תשלום עבור שירותי ייעוץ")
  */
