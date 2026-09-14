@@ -3,5 +3,21 @@
 
 
 
- 
+ export class TransactionStore {
+    constructor() {
+        this.transactions = []
+    }
+
+    addTransactions(transactions) {
+        this.transactions = [... this.transactions, ...transactions];
+    }
+
+    getAllTransactions() {
+        return this.transactions
+    }
+
+    clear() {
+        this.transactions = []
+    }
+}
 
