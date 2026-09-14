@@ -6,9 +6,9 @@
 export const columnMapping = {
 
     date : ["תאריך", "Posting Date"],
-    amount : ["Amount"],
-    sender : ["From / To  (Donor Co)"],
-    method : [ "Payment type"],
+    amount : ["   Amount   "],
+    sender : [" From / To  (Donor Co)"],
+    method : [" Payment type "],
     type : ["Details"],
     description : ["Description"]
 

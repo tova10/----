@@ -2,5 +2,14 @@
 // ומפעיל את סדר האתחול הראשוני של הדף.
 
 
-//בדיקה האם הקובץ נטען
-console.log("עמוד האפליקציה נטען בהצלחה");
+import {createFileUploadView} from './fileUploadView.js'
+
+console.log("הדף נטען בהתחלה");
+
+
+const view = createFileUploadView(files => {
+    console.log(files);
+});
+
+document.body.appendChild(view)
+
