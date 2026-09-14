@@ -12,4 +12,7 @@ export const columnMapping = {
     type : ["Details"],
     description : ["Description"]
 
+
 };  
+
+

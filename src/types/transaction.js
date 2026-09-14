@@ -8,10 +8,18 @@
  * 
  * @property {string} date  
  * @property {number} amount
- * @property {string} sender
- * @property {string} method - שיטת התשלום (כרטיס אשראי, העברה בנקאית, מזומן...)
- * @property {"income"|"expense"} type - סוג התנועה (הכנסה או הוצאה)
+ * @property {string} [sender]
+ * @property {string} [method] - שיטת התשלום (כרטיס אשראי, העברה בנקאית, מזומן...)
+ * @property {"income"|"expense"} [type] - סוג התנועה (הכנסה או הוצאה)
+ * @property {string} [description] - תיאור התנועה (למשל "תשלום עבור שירותי ייעוץ")
+ * 
  * @property {Array<string>} emptyDetails - רשימת שדות ריקים (למשל אם אין מספר חשבון או תיאור)
- * @property {string} fileName - שם הקובץ שממנו נלקחה התנועה
- * @property {string} description - תיאור התנועה (למשל "תשלום עבור שירותי ייעוץ")
+ * @property {string} sourceFile    - שם הקובץ שממנו נלקחה התנועה
+ * 
+ * @typedef {Object} ResultObject
+ * 
+ * @property {Array<Transaction>} transactions - רשימת התנועות שנמצאו
+ * @property {Array<string>} errors - רשימת שגיאות שנמצאו במהלך העיבוד
+ * @property {Array<string>} warnings - רשימת אזהרות שנמצאו במהלך העיבוד    
+ * 
  */
