@@ -5,6 +5,7 @@
 import { columnMapping } from '../config/columnMapping.js';
 
 
+
 export function normalizeRows(rows, fileName) {
     return rows.map(row => normalizeRow(row, fileName));
 }
@@ -43,4 +44,6 @@ function findValueByHeaders(row, possibleHeaders) {
     const header = possibleHeaders.find(h => h in row)
     return row[header];
 }
+
+
 
