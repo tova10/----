@@ -10,8 +10,6 @@ export const columnMapping = {
     sender : [" From / To  (Donor Co)"],
     method : [" Payment type "],
     type : ["Details"],
-    // description : ["Description"]
-
 
 };  
 

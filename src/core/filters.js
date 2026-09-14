@@ -17,3 +17,10 @@ export function filterByDateRange(transactions, startDate, endDate) {
         return transactionDate >= new Date(startDate) && transactionDate <= new Date(endDate);
     });
 }
+
+export function filterByAmount(transactions, startAmount, endAmount) {
+    return transactions.filter(t => {
+        if (!t.amount) return false;
+        return t.amount >= startAmount && t.amount <= endAmount;
+    });
+}

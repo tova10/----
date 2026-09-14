@@ -2,7 +2,7 @@
 // והפעלת שרשרת הקריאה (excelReader -> normalizer -> transactionStore).
 
 import { normalizeRows } from "../core/normalizer.js";
-import {readExcelFile} from "../data/excelRender.js"
+import { readExcelFile } from "../data/excelRender.js"
 
 
 export function createFileUploadView(onFilesLoaded) {
@@ -17,12 +17,12 @@ export function createFileUploadView(onFilesLoaded) {
     input.addEventListener('change', async (event) => {
 
         const files = Array.from(event.target.files);
-        
+
         let allTransactions = []
 
         for (const file of files) {
             const rawRows = await readExcelFile(file);
-            allTransactions=[...allTransactions,...normalizeRows(rawRows , file)]
+            allTransactions = [...allTransactions, ...normalizeRows(rawRows, file.name)]
         }
         onFilesLoaded(allTransactions)
     })

@@ -1,7 +1,6 @@
 // מחזיק במקום אחד את כל ה-Transactions מכל קבצי האקסל שנטענו.
 // מאפשר להוסיף נתונים מכמה קבצים ולשלוף את כולם יחד לצורך סינון.
 
-export const transactionStore = new TransactionStore();
 
 export class TransactionStore {
     constructor() {
@@ -13,7 +12,7 @@ export class TransactionStore {
     }
 
     getAllTransactions() {
-        return this.transactions
+        return this.transactions;
     }
 
     clear() {
