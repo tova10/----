@@ -51,7 +51,7 @@ function createCriteriaRow(onSubmitQueries) {
     submitButton.textContent = 'הצג תוצאות';
     submitButton.addEventListener('click', () => {
         const criteria = { sender: senderInput.value, method: methodInput.value, startDate: startDateInput.value, endDate: endDateInput.value };
-        onSubmitQueries([criteria], resultContainer);
+        onSubmitQueries(criteria, resultContainer);
     })
 
     const resultContainer = document.createElement('div')
