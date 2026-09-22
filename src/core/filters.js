@@ -25,3 +25,11 @@ export function filterByDateRange(transactions, startDate, endDate) {
         return transactionDate >= new Date(startDate) && transactionDate <= new Date(endDate);
     });
 }
+
+
+export function filterByMissingFields(transactions, fields) {
+    return transactions.filter(t =>
+        fields.every(field => t.emptyDetails.includes(field))
+    );
+}
+

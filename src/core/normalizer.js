@@ -11,12 +11,12 @@ export function normalizeRows(rows, fileName) {
 }
 
 function normalizeRow(row, fileName) {
-    const date = findValueByHeaders(row, columnMapping.date);
-    const amount = findValueByHeaders(row, columnMapping.amount);
-    const sender = findValueByHeaders(row, columnMapping.sender);
-    const method = findValueByHeaders(row, columnMapping.method);
-    const rawType = findValueByHeaders(row, columnMapping.type);
-    let type=undefined;
+    let date = findValueByHeaders(row, columnMapping.date);
+    let amount = findValueByHeaders(row, columnMapping.amount);
+    let sender = findValueByHeaders(row, columnMapping.sender);
+    let method = findValueByHeaders(row, columnMapping.method);
+    let rawType = findValueByHeaders(row, columnMapping.type);
+    let type = undefined;
     if (rawType !== undefined) {
         type =
             (rawType === "CREDIT" || rawType === "DSLIP") ? "income" : "expense";

@@ -23,6 +23,7 @@ const view2 = createQueryFormView((criteriaList, resultContainer) => {
     resultContainer.appendChild(renderResult(results))
 });
 
+
 document.body.appendChild(view)
 document.body.appendChild(view2)
 

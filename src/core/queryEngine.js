@@ -1,7 +1,7 @@
 // מפעיל את פונקציות הסינון לפי קריטריונים שהתקבלו, ומחשב סכום כולל.
 // תומך גם בהרצת כמה שאילתות יחד ומחזיר תוצאה אחידה (Result Object) לכל אחת.
 
-import { filterBySender, filterByDateRange, filterByMethod ,filterByAmount} from "./filters.js";
+import { filterBySender, filterByDateRange, filterByMethod, filterByAmount, filterByMissingFields } from "./filters.js";
 
 
 export function runQuery(transactions, criteria) {
@@ -15,7 +15,7 @@ export function runQuery(transactions, criteria) {
         filtered = filterByMethod(filtered, criteria.method);
     }
 
-    if (criteria.startAmount && criteria.endAmount) {        
+    if (criteria.startAmount && criteria.endAmount) {
         filtered = filterByAmount(filtered, criteria.startAmount, criteria.endAmount);
     }
 
@@ -23,6 +23,9 @@ export function runQuery(transactions, criteria) {
         filtered = filterByDateRange(filtered, criteria.startDate, criteria.endDate);
     }
 
+    if (criteria.missingFields) {
+        filtered = filterByMissingFields(filtered, criteria.missingFields);
+    }
 
 
     const total = filtered.reduce((sum, transaction) => {

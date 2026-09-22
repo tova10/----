@@ -52,12 +52,31 @@ function createCriteriaRow(onSubmitQueries) {
     endDateInput.type = 'text';
     endDateInput.placeholder = 'עד תאריך';
 
+    const MissingFields = document.createElement('select');
+    MissingFields.multiple = true;
+    const fields = ["date", "amount", "sender", "method","type"];
+    fields.forEach(field => {
+        const option = document.createElement('option');
+        option.value = field;
+        option.textContent = field;
+        MissingFields.appendChild(option);
+    });
+
 
     const submitButton = document.createElement('button');
     submitButton.type = 'button';
     submitButton.textContent = 'הצג תוצאות';
     submitButton.addEventListener('click', () => {
-        const criteria = { sender: senderInput.value, method: methodInput.value, startAmount: startAmountInput.value, endAmount: endAmountInput.value, startDate: startDateInput.value, endDate: endDateInput.value };
+        const criteria = {
+            sender: senderInput.value,
+            method: methodInput.value,
+            startAmount: startAmountInput.value,
+            endAmount: endAmountInput.value,
+            startDate: startDateInput.value,
+            endDate: endDateInput.value,
+            missingFields: Array.from(MissingFields.selectedOptions).map(option => option.value)
+        };        
+
         onSubmitQueries(criteria, resultContainer);
     })
 
@@ -78,6 +97,7 @@ function createCriteriaRow(onSubmitQueries) {
     container.appendChild(endAmountInput);
     container.appendChild(startDateInput);
     container.appendChild(endDateInput);
+    container.appendChild(MissingFields)
     container.appendChild(submitButton);
     container.appendChild(deleteRow)
     container.appendChild(resultContainer);
@@ -92,6 +112,7 @@ function createCriteriaRow(onSubmitQueries) {
         endDateInput: endAmountInput,
         startDateInput: startDateInput,
         endDateInput: endDateInput,
+        MissingFields: MissingFields,
         submitButton: submitButton,
         deleteRow: deleteRow,
         resultContainer: resultContainer
