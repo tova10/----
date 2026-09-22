@@ -7,6 +7,7 @@ import { filterBySender, filterByDateRange, filterByMethod, filterByAmount, filt
 export function runQuery(transactions, criteria) {
     let filtered = transactions;
 
+    
     if (criteria.sender) {
         filtered = filterBySender(filtered, criteria.sender);
     }

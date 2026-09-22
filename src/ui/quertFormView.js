@@ -45,7 +45,7 @@ function createCriteriaRow(onSubmitQueries) {
             endDate: dateRange.getEnd(),
             missingFields: Array.from(missingFields.selectedOptions).map(option => option.value)
         };
-
+        
         onSubmitQueries(criteria, resultContainer);
     })
 
@@ -109,7 +109,7 @@ function createMethodInputs() {
 
     return {
         container: methodsContainer,
-        getValues: () => methodsInputs.map(s => s.value)
+        getValues: () => methodsInputs.map(s=>s.value)
     }
 }
 

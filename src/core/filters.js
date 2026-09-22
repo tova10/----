@@ -3,11 +3,11 @@
 
 
 export function filterBySender(transactions, senders) {
-    return transactions.filter(t => t.sender && senders.some(sender=> t.sender.toLowerCase().includes(sender.toLowerCase())));
+    return transactions.filter(t => t.sender && senders.some(sender => t.sender.toLowerCase().includes(sender.toLowerCase())));
 }
 
 export function filterByMethod(transactions, methods) {
-    return transactions.filter(t => t.method && methods.some(method=> t.method.toLowerCase().includes(method.toLowerCase())));
+    return transactions.filter(t => t.method && methods.some(method => t.method.toLowerCase().includes(method.toLowerCase())));
 }
 
 export function filterByAmount(transactions, startAmount, endAmount) {

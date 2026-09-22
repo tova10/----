@@ -11,11 +11,17 @@ import { TransactionStore } from '../core/transavtionStore.js';
 
 console.log("הדף נטען בהתחלה");
 
-const transactionStore = new TransactionStore();
+export const transactionStore = new TransactionStore();
 
-const view = createFileUploadView(files => {
+const view = createFileUploadView((files => {
     transactionStore.addTransactions(files)
-});
+}),
+    ((fileName, fileView) => {
+        transactionStore.removeFile(fileName);
+        fileView.remove();
+    }),
+  transactionStore.getAllFiles()
+);
 
 const view2 = createQueryFormView((criteriaList, resultContainer) => {
     const results = runQuery(transactionStore.getAllTransactions(), criteriaList);
