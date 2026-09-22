@@ -16,7 +16,7 @@ export function renderResult(result) {
     const table = document.createElement('table');
 
     const headerRow = document.createElement('tr');
-    const headers = ['date', 'amount', 'sender', 'method', 'type'];
+    const headers = ['date', 'amount', 'sender', 'method', 'type','fileName'];
     headers.forEach(headerText => {
         const th = document.createElement('th');
         th.textContent = headerText;

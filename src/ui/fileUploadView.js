@@ -17,12 +17,13 @@ export function createFileUploadView(onFilesLoaded) {
     input.addEventListener('change', async (event) => {
 
         const files = Array.from(event.target.files);
+        console.log(files);
         
         let allTransactions = []
 
         for (const file of files) {
             const rawRows = await readExcelFile(file);
-            allTransactions=[...allTransactions,...normalizeRows(rawRows , file)]
+            allTransactions=[...allTransactions,...normalizeRows(rawRows , file.name)]
         }
         onFilesLoaded(allTransactions)
     })
