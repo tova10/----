@@ -17,7 +17,6 @@ export function createFileUploadView(onFilesLoaded) {
     input.addEventListener('change', async (event) => {
 
         const files = Array.from(event.target.files);
-        console.log(files);
         
         let allTransactions = []
 

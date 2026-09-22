@@ -12,6 +12,7 @@ export function normalizeRows(rows, fileName) {
 
 function normalizeRow(row, fileName) {
     let date = findValueByHeaders(row, columnMapping.date);
+    date = normaliedDate(date)
     let amount = findValueByHeaders(row, columnMapping.amount);
     let sender = findValueByHeaders(row, columnMapping.sender);
     let method = findValueByHeaders(row, columnMapping.method);
@@ -29,6 +30,7 @@ function normalizeRow(row, fileName) {
     if (method === undefined) emptyDetails.push("method");
     if (rawType === undefined) emptyDetails.push("type");
 
+
     return {
         date: date,
         amount: amount,
@@ -43,6 +45,33 @@ function normalizeRow(row, fileName) {
 function findValueByHeaders(row, possibleHeaders) {
     const header = possibleHeaders.find(h => h in row)
     return row[header];
+}
+
+function normaliedDate(date) {
+    if (!date) {
+        return undefined
+    }
+
+    if (date instanceof Date) {
+        return date
+    }
+
+    if (typeof date === 'number') {
+        const excelDate = new Date(Date.UTC(1899, 11, 30+date));
+        return excelDate.toLocaleDateString('en-US',{timeZone:'UTC'});
+    }
+
+    if (typeof date === 'string') {
+        const separator = date.includes('.') ? '.' : '/';
+        const parts = date.split(separator);
+        let day = Number(parts[0]);
+        let month = Number(parts[1]) - 1;
+        let year = Number(parts[2]);
+        if (year < 100) {
+            year += 2000;
+        }
+        return new Date(year, month, day).toLocaleDateString('he-IL');
+    }
 }
 
 
