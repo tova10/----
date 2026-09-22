@@ -20,7 +20,7 @@ const view = createFileUploadView((files => {
         transactionStore.removeFile(fileName);
         fileView.remove();
     }),
-  transactionStore.getAllFiles()
+  () =>transactionStore.getAllFiles()
 );
 
 const view2 = createQueryFormView((criteriaList, resultContainer) => {

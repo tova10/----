@@ -1,7 +1,6 @@
 // מחזיק במקום אחד את כל ה-Transactions מכל קבצי האקסל שנטענו.
 // מאפשר להוסיף נתונים מכמה קבצים ולשלוף את כולם יחד לצורך סינון.
 
-// export const transactionStore = new TransactionStore();
 
 export class TransactionStore {
     constructor() {
@@ -9,7 +8,7 @@ export class TransactionStore {
     }
 
     addTransactions(transactions) {
-        this.filesName.push(transactions[0].fileName)
+        this.filesName = [...new Set([...this.filesName, ...transactions.map(t => t.fileName)])]
         this.transactions = [... this.transactions, ...transactions];
         this.saveToStorage()
     }
@@ -17,17 +16,17 @@ export class TransactionStore {
     getAllTransactions() {
         return this.transactions;
     }
-    getAllFiles(){
+
+    getAllFiles() {
         return this.filesName;
     }
-    
 
     removeFile(fileName) {
         if (this.filesName.includes(fileName)) {
             this.transactions = this.transactions.filter(t => t.fileName !== fileName)
-            this.filesName = this.filesName.filter(f=>f!==fileName)
-        }  
-        this.saveToStorage() 
+            this.filesName = this.filesName.filter(f => f !== fileName)
+        }
+        this.saveToStorage()
     }
 
     clear() {
@@ -36,14 +35,14 @@ export class TransactionStore {
         this.saveToStorage()
     }
 
-    saveToStorage(){
-        localStorage.setItem('transactions',JSON.stringify(this.transactions));
-        localStorage.setItem('filesName',JSON.stringify(this.filesName));
+    saveToStorage() {
+        localStorage.setItem('transactions', JSON.stringify(this.transactions));
+        localStorage.setItem('filesName', JSON.stringify(this.filesName));
     }
 
-    loadFromStorage(){
-        this.transactions = JSON.parse(localStorage.getItem('transactions'))||[];
-        this.filesName = JSON.parse(localStorage.getItem('filesName'))||[];
+    loadFromStorage() {
+        this.transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        this.filesName = JSON.parse(localStorage.getItem('filesName')) || [];
     }
 }
 

@@ -14,8 +14,8 @@ export function createFileUploadView(onFilesLoaded, onFileRemoved, listOfFiles) 
 
     container.appendChild(input);
 
-    if (listOfFiles) {
-        for (const fileName of listOfFiles) {
+    if (listOfFiles()) {
+        for (const fileName of listOfFiles()) {
             container.appendChild(createFileRow(fileName, onFileRemoved))
         }
     }
@@ -27,6 +27,10 @@ export function createFileUploadView(onFilesLoaded, onFileRemoved, listOfFiles) 
         let allTransactions = []
 
         for (const file of files) {
+        
+            if (listOfFiles().includes(file.name)){
+                continue
+            }
             const rawRows = await readExcelFile(file);
             allTransactions = [...allTransactions, ...normalizeRows(rawRows, file.name)]
 
