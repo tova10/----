@@ -37,19 +37,19 @@ function createCriteriaRow(onSubmitQueries) {
     senderInput.placeholder = 'שם';
 
     const startAmountInput = document.createElement('input');
-    startAmountInput.type = 'text';
+    startAmountInput.type = 'number';
     startAmountInput.placeholder = 'מסכום';
 
     const endAmountInput = document.createElement('input');
-    endAmountInput.type = 'text';
+    endAmountInput.type = 'number';
     endAmountInput.placeholder = 'עד סכום';
 
     const startDateInput = document.createElement('input');
-    startDateInput.type = 'text';
+    startDateInput.type = 'date';
     startDateInput.placeholder = 'מתאריך';
 
     const endDateInput = document.createElement('input');
-    endDateInput.type = 'text';
+    endDateInput.type = 'date';
     endDateInput.placeholder = 'עד תאריך';
 
     const MissingFields = document.createElement('select');
@@ -79,6 +79,7 @@ function createCriteriaRow(onSubmitQueries) {
 
         onSubmitQueries(criteria, resultContainer);
     })
+    
 
     const deleteRow = document.createElement('button')
     deleteRow.type = 'button';
