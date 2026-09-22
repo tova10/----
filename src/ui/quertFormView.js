@@ -12,8 +12,6 @@ export function createQueryFormView(onSubmitQueries) {
         container.appendChild(row.container);
     }
 
-    addRow()
-
     //הכפתורים של הוספת שאילתה
     const addRowButton = document.createElement('button');
     addRowButton.type = 'button';
@@ -54,6 +52,14 @@ function createCriteriaRow(onSubmitQueries) {
         onSubmitQueries(criteria, resultContainer);
     })
 
+    const deleteRow = document.createElement('button')
+    deleteRow.type = 'button';
+    deleteRow.textContent = 'מחק שאילתה';
+    deleteRow.addEventListener('click', () => {
+        container.remove();
+    })
+
+
     const resultContainer = document.createElement('div')
 
 
@@ -62,6 +68,7 @@ function createCriteriaRow(onSubmitQueries) {
     container.appendChild(endDateInput);
     container.appendChild(startDateInput);
     container.appendChild(submitButton);
+    container.appendChild(deleteRow)
     container.appendChild(resultContainer);
 
 
@@ -73,6 +80,7 @@ function createCriteriaRow(onSubmitQueries) {
         startDateInput: startDateInput,
         endDateInput: endDateInput,
         submitButton: submitButton,
+        deleteRow:deleteRow,
         resultContainer: resultContainer
     }
 }
