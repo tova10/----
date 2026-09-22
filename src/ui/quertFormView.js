@@ -36,19 +36,28 @@ function createCriteriaRow(onSubmitQueries) {
     senderInput.type = 'text';
     senderInput.placeholder = 'שם';
 
-    const endDateInput = document.createElement('input');
-    endDateInput.type = 'text';
-    endDateInput.placeholder = 'עד תאריך';
+    const startAmountInput = document.createElement('input');
+    startAmountInput.type = 'text';
+    startAmountInput.placeholder = 'מסכום';
+
+    const endAmountInput = document.createElement('input');
+    endAmountInput.type = 'text';
+    endAmountInput.placeholder = 'עד סכום';
 
     const startDateInput = document.createElement('input');
     startDateInput.type = 'text';
     startDateInput.placeholder = 'מתאריך';
 
+    const endDateInput = document.createElement('input');
+    endDateInput.type = 'text';
+    endDateInput.placeholder = 'עד תאריך';
+
+
     const submitButton = document.createElement('button');
     submitButton.type = 'button';
     submitButton.textContent = 'הצג תוצאות';
     submitButton.addEventListener('click', () => {
-        const criteria = { sender: senderInput.value, method: methodInput.value, startDate: startDateInput.value, endDate: endDateInput.value };
+        const criteria = { sender: senderInput.value, method: methodInput.value, startAmount: startAmountInput.value, endAmount: endAmountInput.value, startDate: startDateInput.value, endDate: endDateInput.value };
         onSubmitQueries(criteria, resultContainer);
     })
 
@@ -65,8 +74,10 @@ function createCriteriaRow(onSubmitQueries) {
 
     container.appendChild(methodInput);
     container.appendChild(senderInput);
-    container.appendChild(endDateInput);
+    container.appendChild(startAmountInput);
+    container.appendChild(endAmountInput);
     container.appendChild(startDateInput);
+    container.appendChild(endDateInput);
     container.appendChild(submitButton);
     container.appendChild(deleteRow)
     container.appendChild(resultContainer);
@@ -77,10 +88,12 @@ function createCriteriaRow(onSubmitQueries) {
         container: container,
         methodInput: methodInput,
         senderInput: senderInput,
+        startDateInput: startAmountInput,
+        endDateInput: endAmountInput,
         startDateInput: startDateInput,
         endDateInput: endDateInput,
         submitButton: submitButton,
-        deleteRow:deleteRow,
+        deleteRow: deleteRow,
         resultContainer: resultContainer
     }
 }

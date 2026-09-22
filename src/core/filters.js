@@ -10,6 +10,14 @@ export function filterByMethod(transactions, method) {
     return transactions.filter(t => t.method && t.method.toLowerCase().includes(method.toLowerCase()));
 }
 
+export function filterByAmount(transactions, startAmount, endAmount) {
+    return transactions.filter(t => {
+        if (!t.amount) return false;
+        const transactionAmount = t.amount;
+        return transactionAmount >= startAmount && transactionAmount <= endAmount;
+    });
+}
+
 export function filterByDateRange(transactions, startDate, endDate) {
     return transactions.filter(t => {
         if (!t.date) return false;
