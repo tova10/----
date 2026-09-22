@@ -2,12 +2,12 @@
 // כל פונקציה מקבלת רשימת תנועות ומחזירה רשימה מסוננת - בלי תלות בפונקציות האחרות.
 
 
-export function filterBySender(transactions, sender) {
-    return transactions.filter(t => t.sender && t.sender.toLowerCase().includes(sender.toLowerCase()));
+export function filterBySender(transactions, senders) {
+    return transactions.filter(t => t.sender && senders.some(sender=> t.sender.toLowerCase().includes(sender.toLowerCase())));
 }
 
-export function filterByMethod(transactions, method) {
-    return transactions.filter(t => t.method && t.method.toLowerCase().includes(method.toLowerCase()));
+export function filterByMethod(transactions, methods) {
+    return transactions.filter(t => t.method && methods.some(method=> t.method.toLowerCase().includes(method.toLowerCase())));
 }
 
 export function filterByAmount(transactions, startAmount, endAmount) {

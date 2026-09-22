@@ -23,63 +23,32 @@ export function createQueryFormView(onSubmitQueries) {
 }
 
 
-
 function createCriteriaRow(onSubmitQueries) {
     const container = document.createElement('div');
 
-
-    const methodInput = document.createElement('input');
-    methodInput.type = 'text';
-    methodInput.placeholder = 'אמצעי תשלום';
-
-    const senderInput = document.createElement('input');
-    senderInput.type = 'text';
-    senderInput.placeholder = 'שם';
-
-    const startAmountInput = document.createElement('input');
-    startAmountInput.type = 'number';
-    startAmountInput.placeholder = 'מסכום';
-
-    const endAmountInput = document.createElement('input');
-    endAmountInput.type = 'number';
-    endAmountInput.placeholder = 'עד סכום';
-
-    const startDateInput = document.createElement('input');
-    startDateInput.type = 'date';
-    startDateInput.placeholder = 'מתאריך';
-
-    const endDateInput = document.createElement('input');
-    endDateInput.type = 'date';
-    endDateInput.placeholder = 'עד תאריך';
-
-    const MissingFields = document.createElement('select');
-    MissingFields.multiple = true;
-    const fields = ["date", "amount", "sender", "method","type"];
-    fields.forEach(field => {
-        const option = document.createElement('option');
-        option.value = field;
-        option.textContent = field;
-        MissingFields.appendChild(option);
-    });
-
+    const methodInputs = createMethodInputs();
+    const senderInputs = createSenderInputs();
+    const amountRange = createAmountRangeInputs();
+    const dateRange = createDateRangeInputs();
+    const missingFields = createMissingFieldsSelect();
 
     const submitButton = document.createElement('button');
     submitButton.type = 'button';
     submitButton.textContent = 'הצג תוצאות';
     submitButton.addEventListener('click', () => {
         const criteria = {
-            sender: senderInput.value,
-            method: methodInput.value,
-            startAmount: startAmountInput.value,
-            endAmount: endAmountInput.value,
-            startDate: startDateInput.value,
-            endDate: endDateInput.value,
-            missingFields: Array.from(MissingFields.selectedOptions).map(option => option.value)
-        };        
+            method: methodInputs.getValues(),
+            sender: senderInputs.getValues(),
+            startAmount: amountRange.getStart(),
+            endAmount: amountRange.getEnd(),
+            startDate: dateRange.getStart(),
+            endDate: dateRange.getEnd(),
+            missingFields: Array.from(missingFields.selectedOptions).map(option => option.value)
+        };
 
         onSubmitQueries(criteria, resultContainer);
     })
-    
+
 
     const deleteRow = document.createElement('button')
     deleteRow.type = 'button';
@@ -92,13 +61,11 @@ function createCriteriaRow(onSubmitQueries) {
     const resultContainer = document.createElement('div')
 
 
-    container.appendChild(methodInput);
-    container.appendChild(senderInput);
-    container.appendChild(startAmountInput);
-    container.appendChild(endAmountInput);
-    container.appendChild(startDateInput);
-    container.appendChild(endDateInput);
-    container.appendChild(MissingFields)
+    container.appendChild(methodInputs.container);
+    container.appendChild(senderInputs.container);
+    container.appendChild(amountRange.container);
+    container.appendChild(dateRange.container);
+    container.appendChild(missingFields);
     container.appendChild(submitButton);
     container.appendChild(deleteRow)
     container.appendChild(resultContainer);
@@ -107,15 +74,123 @@ function createCriteriaRow(onSubmitQueries) {
 
     return {
         container: container,
-        methodInput: methodInput,
-        senderInput: senderInput,
-        startDateInput: startAmountInput,
-        endDateInput: endAmountInput,
-        startDateInput: startDateInput,
-        endDateInput: endDateInput,
-        MissingFields: MissingFields,
+        methodInputs: methodInputs,
+        senderInputs: senderInputs,
+        amountRange: amountRange,
+        dateRange: dateRange,
+        missingFields: missingFields,
         submitButton: submitButton,
         deleteRow: deleteRow,
         resultContainer: resultContainer
     }
+}
+
+
+function createMethodInputs() {
+
+    const methodsInputs = [];
+    const methodsContainer = document.createElement('div');
+
+    function addmethodInput() {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = 'אמצעי תשלום';
+        methodsInputs.push(input);
+        methodsContainer.appendChild(input);
+    }
+
+    addmethodInput();
+
+    const addSenderButton = document.createElement('button');
+    addSenderButton.type = 'button';
+    addSenderButton.textContent = '+';
+    addSenderButton.addEventListener('click', addmethodInput);
+    methodsContainer.appendChild(addSenderButton)
+
+    return {
+        container: methodsContainer,
+        getValues: () => methodsInputs.map(s => s.value)
+    }
+}
+
+function createSenderInputs() {
+    const senderInputs = [];
+    const sendersContainer = document.createElement('div');
+
+    function addSenderInput() {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = 'שם';
+        senderInputs.push(input);
+        sendersContainer.appendChild(input);
+    }
+
+    addSenderInput();
+
+    const addSenderButton = document.createElement('button');
+    addSenderButton.type = 'button';
+    addSenderButton.textContent = '+';
+    addSenderButton.addEventListener('click', addSenderInput);
+    sendersContainer.appendChild(addSenderButton)
+
+
+    return {
+        container: sendersContainer,
+        getValues: () => senderInputs.map(s => s.value)
+    }
+}
+
+function createAmountRangeInputs() {
+    const container = document.createElement('div');
+
+    const startAmountInput = document.createElement('input');
+    startAmountInput.type = 'number';
+    startAmountInput.placeholder = 'מסכום';
+
+    const endAmountInput = document.createElement('input');
+    endAmountInput.type = 'number';
+    endAmountInput.placeholder = 'עד סכום';
+
+    container.appendChild(startAmountInput);
+    container.appendChild(endAmountInput);
+
+    return {
+        container: container,
+        getStart: () => startAmountInput.value,
+        getEnd: () => endAmountInput.value
+    }
+}
+
+function createDateRangeInputs() {
+    const container = document.createElement('div');
+
+    const startDateInput = document.createElement('input');
+    startDateInput.type = 'date';
+    startDateInput.placeholder = 'מתאריך';
+
+    const endDateInput = document.createElement('input');
+    endDateInput.type = 'date';
+    endDateInput.placeholder = 'עד תאריך';
+
+    container.appendChild(startDateInput);
+    container.appendChild(endDateInput);
+
+    return {
+        container: container,
+        getStart: () => startDateInput.value,
+        getEnd: () => endDateInput.value
+    }
+}
+
+function createMissingFieldsSelect() {
+    const MissingFields = document.createElement('select');
+    MissingFields.multiple = true;
+    const fields = ["date", "amount", "sender", "method", "type"];
+    fields.forEach(field => {
+        const option = document.createElement('option');
+        option.value = field;
+        option.textContent = field;
+        MissingFields.appendChild(option);
+    });
+    return MissingFields
 }
