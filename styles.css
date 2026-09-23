@@ -1,0 +1,234 @@
+/* === משתני עיצוב === */
+:root {
+    --bg-color: #f7f8fa;
+    --surface-color: #ffffff;
+    --text-color: #1e2530;
+    --text-muted: #6b7280;
+    --border-color: #e2e5ea;
+
+    --primary-color: #2856c9;
+    --primary-hover: #1e42a3;
+
+    --danger-color: #d64545;
+    --danger-hover: #b73838;
+
+    --income-color: #1a8f5e;
+    --expense-color: #d64545;
+
+    --warning-bg: #fff8e6;
+    --warning-border: #f0c14b;
+    --warning-text: #8a6300;
+
+    --radius: 8px;
+    --spacing: 16px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: var(--spacing);
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Heebo', sans-serif;
+    direction: rtl;
+    line-height: 1.5;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    color: var(--text-color);
+}
+
+/* === מבנה כללי === */
+.section-block {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* === כפתורים === */
+button {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+button:not(.danger):not(.delete-x) {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+button:not(.danger):not(.delete-x):hover {
+    background: var(--primary-hover);
+}
+
+button.danger,
+button.delete-x {
+    background: var(--surface-color);
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
+
+button.danger:hover,
+button.delete-x:hover {
+    background: var(--danger-color);
+    color: #fff;
+}
+
+/* === שדות קלט === */
+input[type="text"],
+input[type="date"] {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    background: var(--surface-color);
+    color: var(--text-color);
+    margin-left: 8px;
+    margin-bottom: 8px;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(40, 86, 201, 0.15);
+}
+
+input[type="file"] {
+    font-family: inherit;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+/* === רשימת קבצים === */
+.file-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.file-row p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.file-row button {
+    font-size: 12px;
+    padding: 4px 10px;
+    background: var(--surface-color);
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
+
+.file-row button:hover {
+    background: var(--danger-color);
+    color: #fff;
+}
+
+/* === שורת שאילתה === */
+.query-row {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 16px;
+    background: var(--surface-color);
+}
+
+.query-row input {
+    width: 150px;
+}
+
+/* === תוצאה === */
+.result-wrapper {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--bg-color);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+}
+
+.result-wrapper p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.result-total {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-color) !important;
+}
+
+/* === טבלת תוצאות === */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background: var(--surface-color);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+thead tr {
+    background: var(--primary-color);
+}
+
+th {
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    text-align: right;
+    padding: 12px 14px;
+}
+
+td {
+    padding: 12px 14px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+tbody tr:hover {
+    background: var(--bg-color);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* צבע לפי סוג תנועה */
+td.income {
+    color: var(--income-color);
+    font-weight: 600;
+}
+
+td.expense {
+    color: var(--expense-color);
+    font-weight: 600;
+}
+
+/* === נתונים חסרים === */
+td.missing {
+    color: var(--warning-text);
+    background: var(--warning-bg);
+    font-style: italic;
+}

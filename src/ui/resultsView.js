@@ -16,7 +16,7 @@ export function renderResult(result) {
     const table = document.createElement('table');
 
     const headerRow = document.createElement('tr');
-    const headers = ['date', 'amount', 'sender', 'method', 'type','fileName'];
+    const headers = ['date', 'amount', 'sender', 'method', 'type', 'fileName'];
     headers.forEach(headerText => {
         const th = document.createElement('th');
         th.textContent = headerText;
@@ -42,7 +42,7 @@ export function renderResult(result) {
     const amount = document.createElement('p');
     amount.textContent = `סה"כ:  ${result.total}  `;
     wrapper.appendChild(amount);
-
+    amount.className = 'result-total';
 
 
 

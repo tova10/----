@@ -6,7 +6,7 @@ import { readExcelFile } from "../data/excelRender.js"
 
 export function createFileUploadView(onFilesLoaded, onFileRemoved, listOfFiles) {
     const container = document.createElement('div');
-
+container.className = 'section-block';
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.xlsx, .xls, .csv';
@@ -48,7 +48,7 @@ export function createFileUploadView(onFilesLoaded, onFileRemoved, listOfFiles) 
 function createFileRow(fileName, onFileRemoved) {
 
     const fileContainer = document.createElement('div');
-
+fileContainer.className = 'file-row';
     const fileView = document.createElement('p');
     fileView.textContent = fileName;
     fileContainer.appendChild(fileView);

@@ -3,7 +3,7 @@
 
 export function createQueryFormView(onSubmitQueries) {
     const container = document.createElement('div');
-
+    container.className = 'section-block';
     const rows = []
 
     function addRow() {
@@ -25,7 +25,7 @@ export function createQueryFormView(onSubmitQueries) {
 
 function createCriteriaRow(onSubmitQueries) {
     const container = document.createElement('div');
-
+    container.className = 'query-row';
     const methodInputs = createMethodInputs();
     const senderInputs = createSenderInputs();
     const amountRange = createAmountRangeInputs();
@@ -45,7 +45,7 @@ function createCriteriaRow(onSubmitQueries) {
             endDate: dateRange.getEnd(),
             missingFields: Array.from(missingFields.selectedOptions).map(option => option.value)
         };
-        
+
         onSubmitQueries(criteria, resultContainer);
     })
 
@@ -59,7 +59,7 @@ function createCriteriaRow(onSubmitQueries) {
 
 
     const resultContainer = document.createElement('div')
-
+resultContainer.className = 'result-wrapper';
 
     container.appendChild(methodInputs.container);
     container.appendChild(senderInputs.container);
@@ -109,7 +109,7 @@ function createMethodInputs() {
 
     return {
         container: methodsContainer,
-        getValues: () => methodsInputs.map(s=>s.value)
+        getValues: () => methodsInputs.map(s => s.value)
     }
 }
 
