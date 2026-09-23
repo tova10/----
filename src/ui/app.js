@@ -23,7 +23,7 @@ const view = createFileUploadView((files => {
   () =>transactionStore.getAllFiles()
 );
 
-const view2 = createQueryFormView((criteriaList, resultContainer) => {
+const view2 = createQueryFormView((criteriaList, resultContainer) => {  
     const results = runQuery(transactionStore.getAllTransactions(), criteriaList);
     resultContainer.innerHTML = '';
     resultContainer.appendChild(renderResult(results))

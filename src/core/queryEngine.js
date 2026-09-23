@@ -7,12 +7,11 @@ import { filterBySender, filterByDateRange, filterByMethod, filterByAmount, filt
 export function runQuery(transactions, criteria) {
     let filtered = transactions;
 
-    
-    if (criteria.sender) {
+    if (criteria.sender.some(s=>s!=='' && s!==' ')) {
         filtered = filterBySender(filtered, criteria.sender);
     }
 
-    if (criteria.method) {
+    if (criteria.method.some(s=>s!=='' && s!==' ')) {
         filtered = filterByMethod(filtered, criteria.method);
     }
 

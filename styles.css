@@ -1,120 +1,126 @@
 /* === משתני עיצוב === */
 :root {
-    --bg-color: #f7f8fa;
+    --bg-color: #f4f6f9;
     --surface-color: #ffffff;
-    --text-color: #1e2530;
+    --text-color: #1a2233;
     --text-muted: #6b7280;
-    --border-color: #e2e5ea;
+    --border-color: #e3e7ee;
 
     --primary-color: #2856c9;
     --primary-hover: #1e42a3;
+    --primary-light: #eaf0ff;
 
     --danger-color: #d64545;
-    --danger-hover: #b73838;
+    --danger-light: #fdecec;
 
     --income-color: #1a8f5e;
     --expense-color: #d64545;
 
-    --warning-bg: #fff8e6;
-    --warning-border: #f0c14b;
-    --warning-text: #8a6300;
-
-    --radius: 8px;
-    --spacing: 16px;
+    --radius: 10px;
+    --radius-sm: 6px;
 }
 
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
-    padding: var(--spacing);
+    padding: 32px;
     background: var(--bg-color);
     color: var(--text-color);
     font-family: 'Heebo', sans-serif;
     direction: rtl;
     line-height: 1.5;
+    max-width: 900px;
+    margin-inline: auto;
 }
 
-h1 {
-    font-size: 24px;
-    font-weight: 700;
-    margin: 0 0 20px 0;
-    color: var(--text-color);
-}
+h1 { font-size: 26px; font-weight: 700; margin: 0 0 24px 0; }
 
-/* === מבנה כללי === */
 .section-block {
     background: var(--surface-color);
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(20, 30, 60, 0.04);
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 0 0 16px 0;
+    text-transform: none;
 }
 
 /* === כפתורים === */
 button {
     font-family: inherit;
     font-size: 14px;
-    font-weight: 500;
-    padding: 8px 16px;
-    border-radius: var(--radius);
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
     border: 1px solid transparent;
     cursor: pointer;
-    transition: background-color 0.15s ease;
+    transition: all 0.15s ease;
 }
 
-button:not(.danger):not(.delete-x) {
+.btn-primary {
     background: var(--primary-color);
     color: #fff;
 }
+.btn-primary:hover { background: var(--primary-hover); }
 
-button:not(.danger):not(.delete-x):hover {
-    background: var(--primary-hover);
-}
-
-button.danger,
-button.delete-x {
+.btn-outline-danger {
     background: var(--surface-color);
     color: var(--danger-color);
     border: 1px solid var(--danger-color);
 }
-
-button.danger:hover,
-button.delete-x:hover {
+.btn-outline-danger:hover {
     background: var(--danger-color);
     color: #fff;
 }
 
-/* === שדות קלט === */
-input[type="text"],
-input[type="date"] {
-    font-family: inherit;
+.icon-btn {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1;
+    border: none;
+}
+.icon-btn:hover {
+    background: var(--danger-light);
+    color: var(--danger-color);
+}
+
+/* === העלאת קבצים === */
+.file-upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    border: 1px dashed var(--primary-color);
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
     font-size: 14px;
-    padding: 8px 10px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    background: var(--surface-color);
-    color: var(--text-color);
-    margin-left: 8px;
-    margin-bottom: 8px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: background 0.15s ease;
 }
+.file-upload-label:hover { background: #dde8ff; }
+.file-upload-input { display: none; }
 
-input[type="text"]:focus,
-input[type="date"]:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(40, 86, 201, 0.15);
-}
+.file-list { display: flex; flex-direction: column; gap: 8px; }
 
-input[type="file"] {
-    font-family: inherit;
-    font-size: 14px;
-    margin-bottom: 12px;
-}
-
-/* === רשימת קבצים === */
 .file-row {
     display: flex;
     align-items: center;
@@ -122,113 +128,213 @@ input[type="file"] {
     padding: 10px 14px;
     background: var(--bg-color);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    margin-bottom: 8px;
+    border-radius: var(--radius-sm);
     font-size: 14px;
 }
 
-.file-row p {
-    margin: 0;
+.file-row .file-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-weight: 500;
 }
 
-.file-row button {
-    font-size: 12px;
-    padding: 4px 10px;
-    background: var(--surface-color);
-    color: var(--danger-color);
-    border: 1px solid var(--danger-color);
+.file-row .file-icon {
+    color: var(--primary-color);
+    font-size: 16px;
 }
 
-.file-row button:hover {
-    background: var(--danger-color);
-    color: #fff;
-}
-
-/* === שורת שאילתה === */
+/* === טופס שאילתה === */
 .query-row {
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
-    padding: 16px;
+    padding: 20px;
     margin-bottom: 16px;
     background: var(--surface-color);
+    position: relative;
 }
 
-.query-row input {
-    width: 150px;
+.query-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.query-row-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.field input[type="text"],
+.field input[type="date"] {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 9px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--surface-color);
+    color: var(--text-color);
+    width: 100%;
+}
+
+.field input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(40, 86, 201, 0.12);
+}
+
+.query-row-actions {
+    display: flex;
+    gap: 10px;
 }
 
 /* === תוצאה === */
 .result-wrapper {
-    margin-top: 16px;
-    padding: 16px;
+    margin-top: 18px;
     background: var(--bg-color);
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
-}
-
-.result-wrapper p {
-    margin: 4px 0;
-    font-size: 14px;
-    color: var(--text-muted);
-}
-
-.result-total {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text-color) !important;
-}
-
-/* === טבלת תוצאות === */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-    background: var(--surface-color);
-    border-radius: var(--radius);
     overflow: hidden;
 }
 
-thead tr {
-    background: var(--primary-color);
-}
-
-th {
-    color: #fff;
-    font-weight: 600;
-    font-size: 13px;
-    text-align: right;
-    padding: 12px 14px;
-}
-
-td {
-    padding: 12px 14px;
-    font-size: 14px;
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: var(--primary-light);
     border-bottom: 1px solid var(--border-color);
 }
 
-tbody tr:hover {
-    background: var(--bg-color);
+.result-title { font-size: 15px; font-weight: 700; color: var(--primary-color); }
+
+.result-summary {
+    display: flex;
+    gap: 20px;
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--text-muted);
 }
 
-tbody tr:last-child td {
-    border-bottom: none;
+.result-summary .total {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-color);
 }
 
-/* צבע לפי סוג תנועה */
-td.income {
-    color: var(--income-color);
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface-color);
+}
+
+th {
+    color: var(--text-muted);
     font-weight: 600;
+    font-size: 11px;
+    text-align: right;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border-color);
 }
 
-td.expense {
-    color: var(--expense-color);
+td {
+    padding: 8px 14px;
+    font-size: 12.5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+tbody tr:hover { background: var(--bg-color); }
+tbody tr:last-child td { border-bottom: none; }
+
+td.income { color: var(--income-color); font-weight: 600; }
+td.expense { color: var(--expense-color); font-weight: 600; }
+
+/* === קבוצת שדה עם תווית === */
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.field-label {
+    font-size: 12px;
     font-weight: 600;
+    color: var(--text-muted);
 }
 
-/* === נתונים חסרים === */
-td.missing {
-    color: var(--warning-text);
-    background: var(--warning-bg);
-    font-style: italic;
+/* === שורת קלטים מרובים (שם/אמצעי) + כפתור הוספה === */
+.multi-input-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
 }
+
+.multi-input-row input[type="text"] {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 9px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    width: 140px;
+}
+
+.add-btn {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    border: 1px dashed var(--primary-color);
+    font-size: 16px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.add-btn:hover { background: #dde8ff; }
+
+/* === טווח (סכום/תאריך) === */
+.range-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.range-group input {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 9px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    flex: 1;
+}
+
+.range-dash {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+

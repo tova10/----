@@ -9,7 +9,7 @@ export class TransactionStore {
 
     addTransactions(transactions) {
         this.filesName = [...new Set([...this.filesName, ...transactions.map(t => t.fileName)])]
-        this.transactions = [... this.transactions, ...transactions];
+        this.transactions = [... this.transactions, ...transactions];        
         this.saveToStorage()
     }
 
