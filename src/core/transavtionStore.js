@@ -9,7 +9,7 @@ export class TransactionStore {
 
     addTransactions(transactions) {
         this.filesName = [...new Set([...this.filesName, ...transactions.map(t => t.fileName)])]
-        this.transactions = [... this.transactions, ...transactions];        
+        this.transactions = [... this.transactions, ...transactions];
         this.saveToStorage()
     }
 
@@ -19,6 +19,14 @@ export class TransactionStore {
 
     getAllFiles() {
         return this.filesName;
+    }
+
+    getUniqueSenders() {
+        return [...new Set(this.transactions.map(t => t.sender).filter(s => s))];
+    }
+
+    getUniqueMethods() {
+        return [...new Set(this.transactions.map(t => t.method).filter(m => m))];
     }
 
     removeFile(fileName) {

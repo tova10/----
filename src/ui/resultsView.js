@@ -54,5 +54,7 @@ export function renderResult(result) {
     });
 
     wrapper.appendChild(table);
+
+    
     return wrapper;
 }

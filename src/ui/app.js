@@ -14,20 +14,19 @@ console.log("הדף נטען בהתחלה");
 export const transactionStore = new TransactionStore();
 
 const view = createFileUploadView((files => {
-    transactionStore.addTransactions(files)
-}),
-    ((fileName, fileView) => {
-        transactionStore.removeFile(fileName);
-        fileView.remove();
-    }),
+    transactionStore.addTransactions(files)}),
+    ((fileName, fileView) => { transactionStore.removeFile(fileName);
+        fileView.remove();}),
   () =>transactionStore.getAllFiles()
 );
 
 const view2 = createQueryFormView((criteriaList, resultContainer) => {  
     const results = runQuery(transactionStore.getAllTransactions(), criteriaList);
     resultContainer.innerHTML = '';
-    resultContainer.appendChild(renderResult(results))
-});
+    resultContainer.appendChild(renderResult(results))},
+    ()=>transactionStore.getUniqueMethods(),
+    ()=>transactionStore.getUniqueSenders()
+);
 
 
 document.body.appendChild(view)

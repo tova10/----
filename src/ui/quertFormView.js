@@ -1,7 +1,7 @@
 // מציג טופס להזנת קריטריוני חיפוש (שם, אמצעי, טווח תאריכים),
 // ומאפשר הוספת כמה טפסי שאילתה במקביל.
 
-export function createQueryFormView(onSubmitQueries) {
+export function createQueryFormView(onSubmitQueries, getMethods, getSenders) {
 
     //אזור ראשי - כל השאילתות וכל התוצאות
     const container = document.createElement('div');
@@ -20,7 +20,7 @@ export function createQueryFormView(onSubmitQueries) {
     //פונקציה המוסיפה שאילתה
     function addRow() {
         rowCounter++;
-        const row = createCriteriaRow(onSubmitQueries, rowCounter);
+        const row = createCriteriaRow(onSubmitQueries, rowCounter, getMethods, getSenders);
         rows.push(row);
         container.appendChild(row.container);
     }
@@ -36,7 +36,7 @@ export function createQueryFormView(onSubmitQueries) {
     return container;
 }
 
-function createCriteriaRow(onSubmitQueries, rowNumber) {
+function createCriteriaRow(onSubmitQueries, rowNumber, getMethods, getSenders) {
     //אזור שאחראי על שאילתה מסוימת והתוצאה שלה
     const container = document.createElement('div');
     container.className = 'query-row';
@@ -64,8 +64,8 @@ function createCriteriaRow(onSubmitQueries, rowNumber) {
     container.appendChild(header);
 
     //יוצר את כל תיבות הקלט של השאילתה
-    const methodInputs = createMethodInputs();
-    const senderInputs = createSenderInputs();
+    const methodInputs = createMethodInputs(getMethods);
+    const senderInputs = createSenderInputs(getSenders);
     const amountRange = createAmountRangeInputs();
     const dateRange = createDateRangeInputs();
     const missingFields = createMissingFieldsSelect();
@@ -122,7 +122,7 @@ function createCriteriaRow(onSubmitQueries, rowNumber) {
 }
 
 
-function createMethodInputs() {
+function createMethodInputs(getMethods) {
     //אזור תיבותת הקלט של המתודות
     const wrapper = document.createElement('div');
     wrapper.className = 'field-group';
@@ -139,6 +139,20 @@ function createMethodInputs() {
     //האזור של תיבות הקלט
     const row = document.createElement('div');
     row.className = 'multi-input-row';
+
+    //רשימת כל הנתונים הקיימים כבר בקובץ
+    const datalistId = 'method-options-' + Math.random().toString(36).slice(2);
+
+    const datalist = document.createElement('datalist');
+    datalist.id = datalistId;
+    getMethods().forEach(method => {
+        const option = document.createElement('option');
+        option.value = method;
+        datalist.appendChild(option);
+    });
+    wrapper.appendChild(datalist);
+
+
 
     //הוספת עוד תיבה
     const addMethodButton = document.createElement('button');
@@ -157,6 +171,7 @@ function createMethodInputs() {
         }
         const input = document.createElement('input');
         input.type = 'text';
+        input.setAttribute('list', datalistId);
         input.placeholder = 'לדוג: מזומן';
         methodsInputs.push(input);
         row.insertBefore(input, addMethodButton);
@@ -171,7 +186,7 @@ function createMethodInputs() {
     }
 }
 
-function createSenderInputs() {
+function createSenderInputs(getSenders) {
     const wrapper = document.createElement('div');
     wrapper.className = 'field-group';
 
@@ -183,6 +198,18 @@ function createSenderInputs() {
     const senderInputs = [];
     const row = document.createElement('div');
     row.className = 'multi-input-row';
+
+    //רשימת כל הנתונים הקיימים כבר בקובץ
+    const datalistId = 'sender-options-' + Math.random().toString(36).slice(2);
+
+    const datalist = document.createElement('datalist');
+    datalist.id = datalistId;
+    getSenders().forEach(sender => {
+        const option = document.createElement('option');
+        option.value = sender;
+        datalist.appendChild(option);
+    });
+    wrapper.appendChild(datalist);
 
     const addSenderButton = document.createElement('button');
     addSenderButton.type = 'button';
@@ -198,6 +225,7 @@ function createSenderInputs() {
         }
         const input = document.createElement('input');
         input.type = 'text';
+        input.setAttribute('list', datalistId);
         input.placeholder = 'שם';
         senderInputs.push(input);
         row.insertBefore(input, addSenderButton);
