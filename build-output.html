@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <title>קריאת אקסל</title>
+    <style>
+/* === משתני עיצוב === */
+:root {
+    --bg-color: #f4f6f9;
+    --surface-color: #ffffff;
+    --text-color: #1a2233;
+    --text-muted: #6b7280;
+    --border-color: #e3e7ee;
+
+    --primary-color: #2856c9;
+    --primary-hover: #1e42a3;
+    --primary-light: #eaf0ff;
+
+    --danger-color: #d64545;
+    --danger-light: #fdecec;
+
+    --income-color: #1a8f5e;
+    --expense-color: #d64545;
+
+    --radius: 10px;
+    --radius-sm: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 32px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Heebo', sans-serif;
+    direction: rtl;
+    line-height: 1.5;
+    max-width: 900px;
+    margin-inline: auto;
+}
+
+h1 { font-size: 26px; font-weight: 700; margin: 0 0 24px 0; }
+
+.section-block {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(20, 30, 60, 0.04);
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 0 0 16px 0;
+    text-transform: none;
+}
+
+/* === כפתורים === */
+button {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: #fff;
+}
+.btn-primary:hover { background: var(--primary-hover); }
+
+.btn-outline-danger {
+    background: var(--surface-color);
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
+.btn-outline-danger:hover {
+    background: var(--danger-color);
+    color: #fff;
+}
+
+.icon-btn {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1;
+    border: none;
+}
+.icon-btn:hover {
+    background: var(--danger-light);
+    color: var(--danger-color);
+}
+
+/* === העלאת קבצים === */
+.file-upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    border: 1px dashed var(--primary-color);
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: background 0.15s ease;
+}
+.file-upload-label:hover { background: #dde8ff; }
+.file-upload-input { display: none; }
+
+.file-list { display: flex; flex-direction: column; gap: 8px; }
+
+.file-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+}
+
+.file-row .file-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.file-row .file-icon {
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+/* === טופס שאילתה === */
+.query-row {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    background: var(--surface-color);
+    position: relative;
+}
+
+.query-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.query-row-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.field input[type="text"],
+.field input[type="date"] {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 9px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--surface-color);
+    color: var(--text-color);
+    width: 100%;
+}
+
+.field input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(40, 86, 201, 0.12);
+}
+
+.query-row-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* === תוצאה === */
+.result-wrapper {
+    margin-top: 18px;
+    background: var(--bg-color);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: var(--primary-light);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.result-title { font-size: 15px; font-weight: 700; color: var(--primary-color); }
+
+.result-summary {
+    display: flex;
+    gap: 20px;
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.result-summary .total {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface-color);
+}
+
+th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 11px;
+    text-align: right;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+td {
+    padding: 8px 14px;
+    font-size: 12.5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+tbody tr:hover { background: var(--bg-color); }
+tbody tr:last-child td { border-bottom: none; }
+
+td.income { color: var(--income-color); font-weight: 600; }
+td.expense { color: var(--expense-color); font-weight: 600; }
+
+/* === קבוצת שדה עם תווית === */
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.field-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* === שורת קלטים מרובים (שם/אמצעי) + כפתור הוספה === */
+.multi-input-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.multi-input-row input[type="text"] {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 9px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    width: 140px;
+}
+
+.add-btn {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    border: 1px dashed var(--primary-color);
+    font-size: 16px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.add-btn:hover { background: #dde8ff; }
+
+/* === טווח (סכום/תאריך) === */
+.range-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.range-group input {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 9px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    flex: 1;
+}
+
+.range-dash {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+
+    </style>
+</head>
+
+<body>
+
+    <h1>קריאת אקסל</h1>
+
+    <script>
+
+// ===== src/config/columnMapping.js =====
+// קובץ המיפוי בין כותרות עמודות באקסל (כמו שהן מופיעות בקובץ בפועל)
+// לבין שמות השדות האחידים שהמערכת עובדת איתם (date, sender, method...).
+// זה הקובץ היחיד שצריך לשנות כשמחליפים קובץ אקסל עם כותרות שונות.
+
+
+const columnMapping = {
+
+    date : ["תאריך", "Posting Date"],
+    amount : ["   Amount   " , "Amount"],
+    sender : [" From / To  (Donor Co)"],
+    method : [" Payment type "],
+    type : ["Details"],
+    // description : ["Description"]
+
+
+};
+
+
+// ===== src/data/excelRender.js =====
+// קורא קובץ אקסל גולמי ומחזיר ממנו מערך שורות (כל שורה = אובייקט עם המפתחות כפי שהם באקסל).
+// לא מבין ולא מפרש את הנתונים - רק מוציא אותם מהקובץ.
+
+async function readExcelFile(file) {
+    const arrayBuffer = await file.arrayBuffer(); 
+    const workbook = XLSX.read(arrayBuffer , {type : 'array'});
+
+    const firstSheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[firstSheetName];
+
+    const rows = XLSX.utils.sheet_to_json(sheet); //קוראת את הקובץ שיהיה עם כותרות
+
+    return rows;
+}
+
+
+// ===== src/core/normalizer.js =====
+// הופך שורות גולמיות מהאקסל (excelReader) לרשימת Transaction אחידה,
+// לפי המיפוי שמוגדר ב-columnMapping.
+// מסמן כאן גם שורות עם שדות חסרים, בלי לזרוק אותן.
+
+import { columnMapping } from '../config/columnMapping.js';
+
+
+
+function normalizeRows(rows, fileName) {
+    return rows.map(row => normalizeRow(row, fileName));
+}
+
+function normalizeRow(row, fileName) {
+    let date = findValueByHeaders(row, columnMapping.date);
+    date = normaliedDate(date)
+    let amount = findValueByHeaders(row, columnMapping.amount);
+    let sender = findValueByHeaders(row, columnMapping.sender);
+    let method = findValueByHeaders(row, columnMapping.method);
+    let rawType = findValueByHeaders(row, columnMapping.type);
+    let type = undefined;
+    if (rawType !== undefined) {
+        type =
+            (rawType === "CREDIT" || rawType === "DSLIP") ? "income" : "expense";
+    }
+
+    const emptyDetails = [];
+    if (date === undefined) emptyDetails.push("date");
+    if (amount === undefined) emptyDetails.push("amount");
+    if (sender === undefined) emptyDetails.push("sender");
+    if (method === undefined) emptyDetails.push("method");
+    if (rawType === undefined) emptyDetails.push("type");
+
+
+    return {
+        date: date,
+        amount: amount,
+        sender: sender,
+        method: method,
+        type: type,
+        emptyDetails: emptyDetails,
+        fileName: fileName
+    };
+}
+
+function findValueByHeaders(row, possibleHeaders) {
+    const header = possibleHeaders.find(h => h in row)
+    return row[header];
+}
+
+function normaliedDate(date) {
+    if (!date) {
+        return undefined
+    }
+
+    if (date instanceof Date) {
+        return date
+    }
+
+    if (typeof date === 'number') {
+        const excelDate = new Date(Date.UTC(1899, 11, 30+date));
+        return excelDate.toLocaleDateString('en-US',{timeZone:'UTC'});
+    }
+
+    if (typeof date === 'string') {
+        const separator = date.includes('.') ? '.' : '/';
+        const parts = date.split(separator);
+        let day = Number(parts[0]);
+        let month = Number(parts[1]) - 1;
+        let year = Number(parts[2]);
+        if (year < 100) {
+            year += 2000;
+        }
+        return new Date(year, month, day).toLocaleDateString('he-IL');
+    }
+}
+
+
+// ===== src/core/transavtionStore.js =====
+// מחזיק במקום אחד את כל ה-Transactions מכל קבצי האקסל שנטענו.
+// מאפשר להוסיף נתונים מכמה קבצים ולשלוף את כולם יחד לצורך סינון.
+
+
+class TransactionStore {
+    constructor() {
+        this.loadFromStorage()
+    }
+
+    addTransactions(transactions) {
+        this.filesName = [...new Set([...this.filesName, ...transactions.map(t => t.fileName)])]
+        this.transactions = [... this.transactions, ...transactions];
+        this.saveToStorage()
+    }
+
+    getAllTransactions() {
+        return this.transactions;
+    }
+
+    getAllFiles() {
+        return this.filesName;
+    }
+
+    getUniqueSenders() {
+        return [...new Set(this.transactions.map(t => t.sender).filter(s => s))];
+    }
+
+    getUniqueMethods() {
+        return [...new Set(this.transactions.map(t => t.method).filter(m => m))];
+    }
+
+    removeFile(fileName) {
+        if (this.filesName.includes(fileName)) {
+            this.transactions = this.transactions.filter(t => t.fileName !== fileName)
+            this.filesName = this.filesName.filter(f => f !== fileName)
+        }
+        this.saveToStorage()
+    }
+
+    clear() {
+        this.transactions = []
+        this.filesName = []
+        this.saveToStorage()
+    }
+
+    saveToStorage() {
+        localStorage.setItem('transactions', JSON.stringify(this.transactions));
+        localStorage.setItem('filesName', JSON.stringify(this.filesName));
+    }
+
+    loadFromStorage() {
+        this.transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        this.filesName = JSON.parse(localStorage.getItem('filesName')) || [];
+    }
+}
+
+
+// ===== src/core/filters.js =====
+// פונקציות סינון בודדות ועצמאיות: לפי שם, לפי אמצעי, לפי טווח תאריכים.
+// כל פונקציה מקבלת רשימת תנועות ומחזירה רשימה מסוננת - בלי תלות בפונקציות האחרות.
+
+
+function filterBySender(transactions, senders) {
+    return transactions.filter(t => t.sender && senders.some(sender => t.sender.toLowerCase().includes(sender.toLowerCase())));
+}
+
+function filterByMethod(transactions, methods) {
+    return transactions.filter(t => t.method && methods.some(method => t.method.toLowerCase().includes(method.toLowerCase())));
+}
+
+function filterByAmount(transactions, startAmount, endAmount) {
+    return transactions.filter(t => {
+        if (!t.amount) return false;
+        const transactionAmount = t.amount;
+        return transactionAmount >= startAmount && transactionAmount <= endAmount;
+    });
+}
+
+function filterByDateRange(transactions, startDate, endDate) {
+    return transactions.filter(t => {
+        if (!t.date) return false;
+        const transactionDate = new Date(t.date);
+        return transactionDate >= new Date(startDate) && transactionDate <= new Date(endDate);
+    });
+}
+
+
+function filterByMissingFields(transactions, fields) {
+    return transactions.filter(t =>
+        fields.every(field => t.emptyDetails.includes(field))
+    );
+}
+
+
+// ===== src/core/queryEngine.js =====
+// מפעיל את פונקציות הסינון לפי קריטריונים שהתקבלו, ומחשב סכום כולל.
+// תומך גם בהרצת כמה שאילתות יחד ומחזיר תוצאה אחידה (Result Object) לכל אחת.
+
+import { filterBySender, filterByDateRange, filterByMethod, filterByAmount, filterByMissingFields } from "./filters.js";
+
+
+function runQuery(transactions, criteria) {
+    let filtered = transactions;
+
+    if (criteria.sender.some(s=>s!=='' && s!==' ')) {
+        filtered = filterBySender(filtered, criteria.sender);
+    }
+
+    if (criteria.method.some(s=>s!=='' && s!==' ')) {
+        filtered = filterByMethod(filtered, criteria.method);
+    }
+
+    if (criteria.startAmount && criteria.endAmount) {
+        filtered = filterByAmount(filtered, criteria.startAmount, criteria.endAmount);
+    }
+
+    if (criteria.startDate && criteria.endDate) {
+        filtered = filterByDateRange(filtered, criteria.startDate, criteria.endDate);
+    }
+
+    if (criteria.missingFields) {
+        filtered = filterByMissingFields(filtered, criteria.missingFields);
+    }
+
+
+    const total = filtered.reduce((sum, transaction) => {
+        return sum + (transaction.amount || 0);
+    }, 0);
+
+    return {
+        data: filtered,
+        total: total,
+        count: filtered.length
+    }
+}
+
+
+function runMultipleQueries(transactions, criteriaList) {
+    return criteriaList.map(criteria => runQuery(transactions, criteria));
+}
+
+
+// ===== src/ui/fileUploadView.js =====
+// אחראי על העלאת קובץ/קבצי אקסל ע"י המשתמש,
+// והפעלת שרשרת הקריאה (excelReader -> normalizer -> transactionStore).
+
+import { normalizeRows } from "../core/normalizer.js";
+import { readExcelFile } from "../data/excelRender.js"
+
+function createFileUploadView(onFilesLoaded, onFileRemoved, listOfFiles) {
+    //ראשי
+    const container = document.createElement('div');
+    container.className = 'section-block';
+
+    //כותרת לחלק הקבצים
+    const title = document.createElement('p');
+    title.className = 'section-title';
+    title.textContent = 'קבצי נתונים';
+    container.appendChild(title);
+
+
+    //אחראי על הכפתור עצמו
+    const inputId = 'file-upload-' + Math.random().toString(36).slice(2);
+
+    const label = document.createElement('label');
+    label.className = 'file-upload-label';
+    label.setAttribute('for', inputId);
+    label.textContent = '+ הוסף קובץ';
+
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.id = inputId;
+    input.className = 'file-upload-input';
+    input.accept = '.xlsx, .xls, .csv';
+    input.multiple = true;
+
+    container.appendChild(label);
+    container.appendChild(input);
+
+
+    //אזור הקבצים הקיימים
+    const fileList = document.createElement('div');
+    fileList.className = 'file-list';
+    container.appendChild(fileList);
+
+
+    //כל הקבצים הקיימים כבר     
+    if (listOfFiles()) {
+        for (const fileName of listOfFiles()) {
+            container.appendChild(createFileRow(fileName, onFileRemoved))
+        }
+    }
+
+
+    //מה קורה כשמעלים קבצים
+    input.addEventListener('change', async (event) => {
+        const files = Array.from(event.target.files);
+        let allTransactions = []
+
+        for (const file of files) {
+            if (listOfFiles().includes(file.name)) {
+                continue
+            }
+            const rawRows = await readExcelFile(file);
+            allTransactions = [...allTransactions, ...normalizeRows(rawRows, file.name)]            
+            container.appendChild(createFileRow(file.name, onFileRemoved))
+        }
+        onFilesLoaded(allTransactions)
+    })
+
+
+    return container;
+}
+
+function createFileRow(fileName, onFileRemoved) {
+
+    const fileContainer = document.createElement('div');
+    fileContainer.className = 'file-row';
+
+    const nameWrapper = document.createElement('span');
+    nameWrapper.className = 'file-name';
+    nameWrapper.innerHTML = `<span class="file-icon">📄</span> ${fileName}`;
+    fileContainer.appendChild(nameWrapper);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'icon-btn';
+    deleteButton.textContent = 'x';
+    deleteButton.addEventListener('click', () => {
+        onFileRemoved(fileName, fileContainer)
+    })
+    fileContainer.appendChild(deleteButton);
+
+    return fileContainer
+}
+
+
+// ===== src/ui/quertFormView.js =====
+// מציג טופס להזנת קריטריוני חיפוש (שם, אמצעי, טווח תאריכים),
+// ומאפשר הוספת כמה טפסי שאילתה במקביל.
+
+function createQueryFormView(onSubmitQueries, getMethods, getSenders) {
+
+    //אזור ראשי - כל השאילתות וכל התוצאות
+    const container = document.createElement('div');
+    container.className = 'section-block';
+
+    //כותרת
+    const title = document.createElement('p');
+    title.className = 'section-title';
+    title.textContent = 'שאילתות חיפוש';
+    container.appendChild(title);
+
+    //רשימת השאילתות
+    const rows = []
+    let rowCounter = 0;
+
+    //פונקציה המוסיפה שאילתה
+    function addRow() {
+        rowCounter++;
+        const row = createCriteriaRow(onSubmitQueries, rowCounter, getMethods, getSenders);
+        rows.push(row);
+        container.appendChild(row.container);
+    }
+
+    //כפתור של הוספת שאילתה
+    const addRowButton = document.createElement('button');
+    addRowButton.type = 'button';
+    addRowButton.className = 'btn-primary';
+    addRowButton.textContent = 'הוסף שאילתה נוספת';
+    addRowButton.addEventListener('click', addRow);
+    container.appendChild(addRowButton);
+
+    return container;
+}
+
+function createCriteriaRow(onSubmitQueries, rowNumber, getMethods, getSenders) {
+    //אזור שאחראי על שאילתה מסוימת והתוצאה שלה
+    const container = document.createElement('div');
+    container.className = 'query-row';
+
+    //אזור כותרת השאילתה
+    const header = document.createElement('div');
+    header.className = 'query-row-header';
+
+    //כותרת- מספר השאילתה
+    const rowTitle = document.createElement('span');
+    rowTitle.className = 'query-row-title';
+    rowTitle.textContent = `שאילתה ${rowNumber}`;
+    header.appendChild(rowTitle);
+
+    //כפתור מחיקת השאילתה
+    const deleteRow = document.createElement('button')
+    deleteRow.type = 'button';
+    deleteRow.className = 'icon-btn';
+    deleteRow.textContent = 'x';
+    deleteRow.addEventListener('click', () => {
+        container.remove();
+    })
+    header.appendChild(deleteRow);
+
+    container.appendChild(header);
+
+    //יוצר את כל תיבות הקלט של השאילתה
+    const methodInputs = createMethodInputs(getMethods);
+    const senderInputs = createSenderInputs(getSenders);
+    const amountRange = createAmountRangeInputs();
+    const dateRange = createDateRangeInputs();
+    const missingFields = createMissingFieldsSelect();
+
+    //מוסיף אותם לאזור של הפרטים
+    container.appendChild(methodInputs.container);
+    container.appendChild(senderInputs.container);
+    container.appendChild(amountRange.container);
+    container.appendChild(dateRange.container);
+    container.appendChild(missingFields.container);
+
+
+    //פעולות נוספות בשאילתה (כרגע יש רק 1 של הראה תוצאות)
+    const actions = document.createElement('div');
+    actions.className = 'query-row-actions';
+
+    //כפתור שליחה
+    const submitButton = document.createElement('button');
+    submitButton.type = 'button';
+    submitButton.className = 'btn-primary';
+    submitButton.textContent = 'הצג תוצאות';
+    submitButton.addEventListener('click', () => {
+        const criteria = {
+            method: methodInputs.getValues(),
+            sender: senderInputs.getValues(),
+            startAmount: amountRange.getStart(),
+            endAmount: amountRange.getEnd(),
+            startDate: dateRange.getStart(),
+            endDate: dateRange.getEnd(),
+            missingFields: missingFields.getValues()
+        };
+        //שולח את כל התנאים בתיבת הקלט ואת האזור של התוצאות לדף שאחראי להראות אותם
+        onSubmitQueries(criteria, resultContainer);
+    })
+    actions.appendChild(submitButton);
+    container.appendChild(actions);
+
+    //האזור האחראי על התוצאות
+    const resultContainer = document.createElement('div')
+    container.appendChild(resultContainer);
+
+    //מחזיר את האזור הראשי ואת האזורים הפנימיים
+    return {
+        container: container,
+        methodInputs: methodInputs,
+        senderInputs: senderInputs,
+        amountRange: amountRange,
+        dateRange: dateRange,
+        missingFields: missingFields,
+        submitButton: submitButton,
+        deleteRow: deleteRow,
+        resultContainer: resultContainer
+    }
+}
+
+
+function createMethodInputs(getMethods) {
+    //אזור תיבותת הקלט של המתודות
+    const wrapper = document.createElement('div');
+    wrapper.className = 'field-group';
+
+    //תווית של כותרת של עמצעי תשלום
+    const label = document.createElement('span');
+    label.className = 'field-label';
+    label.textContent = 'אמצעי תשלום';
+    wrapper.appendChild(label);
+
+    //רשימת תיבות הקלט של האמצעי תשלום
+    const methodsInputs = [];
+
+    //האזור של תיבות הקלט
+    const row = document.createElement('div');
+    row.className = 'multi-input-row';
+
+    //רשימת כל הנתונים הקיימים כבר בקובץ
+    const datalistId = 'method-options-' + Math.random().toString(36).slice(2);
+
+    const datalist = document.createElement('datalist');
+    datalist.id = datalistId;
+    getMethods().forEach(method => {
+        const option = document.createElement('option');
+        option.value = method;
+        datalist.appendChild(option);
+    });
+    wrapper.appendChild(datalist);
+
+
+
+    //הוספת עוד תיבה
+    const addMethodButton = document.createElement('button');
+    addMethodButton.type = 'button';
+    addMethodButton.textContent = '+';
+    addMethodButton.className = 'add-btn';
+    addMethodButton.addEventListener('click', addmethodInput);
+
+    row.appendChild(addMethodButton)
+    wrapper.appendChild(row);
+
+    //הוספת עוד תיבת קלט רק אם תיבת הקלט הקודמת מולאה
+    function addmethodInput() {
+        if (methodsInputs.length > 0 && methodsInputs[methodsInputs.length - 1].value === '') {
+            return;
+        }
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.setAttribute('list', datalistId);
+        input.placeholder = 'לדוג: מזומן';
+        methodsInputs.push(input);
+        row.insertBefore(input, addMethodButton);
+    }
+
+    //מוסיף תיבה ראשונה
+    addmethodInput();
+
+    return {
+        container: wrapper,
+        getValues: () => methodsInputs.map(s => s.value)
+    }
+}
+
+function createSenderInputs(getSenders) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'field-group';
+
+    const label = document.createElement('span');
+    label.className = 'field-label';
+    label.textContent = 'שם השולח';
+    wrapper.appendChild(label);
+
+    const senderInputs = [];
+    const row = document.createElement('div');
+    row.className = 'multi-input-row';
+
+    //רשימת כל הנתונים הקיימים כבר בקובץ
+    const datalistId = 'sender-options-' + Math.random().toString(36).slice(2);
+
+    const datalist = document.createElement('datalist');
+    datalist.id = datalistId;
+    getSenders().forEach(sender => {
+        const option = document.createElement('option');
+        option.value = sender;
+        datalist.appendChild(option);
+    });
+    wrapper.appendChild(datalist);
+
+    const addSenderButton = document.createElement('button');
+    addSenderButton.type = 'button';
+    addSenderButton.textContent = '+';
+    addSenderButton.className = 'add-btn';
+    addSenderButton.addEventListener('click', addSenderInput);
+    row.appendChild(addSenderButton);
+
+
+    function addSenderInput() {
+        if (senderInputs.length > 0 && senderInputs[senderInputs.length - 1].value === '') {
+            return;
+        }
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.setAttribute('list', datalistId);
+        input.placeholder = 'שם';
+        senderInputs.push(input);
+        row.insertBefore(input, addSenderButton);
+    }
+
+    addSenderInput();
+
+
+    wrapper.appendChild(row)
+
+
+    return {
+        container: wrapper,
+        getValues: () => senderInputs.map(s => s.value)
+    }
+}
+
+function createAmountRangeInputs() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'field-group';
+
+    const label = document.createElement('span');
+    label.className = 'field-label';
+    label.textContent = 'טווח סכום';
+    wrapper.appendChild(label);
+
+    const row = document.createElement('div');
+    row.className = 'range-group';
+
+    const startAmountInput = document.createElement('input');
+    startAmountInput.type = 'number';
+    startAmountInput.placeholder = 'מסכום';
+
+    const dash = document.createElement('span');
+    dash.className = 'range-dash';
+    dash.textContent = '—';
+
+    const endAmountInput = document.createElement('input');
+    endAmountInput.type = 'number';
+    endAmountInput.placeholder = 'עד סכום';
+
+    row.appendChild(startAmountInput);
+    row.appendChild(dash);
+    row.appendChild(endAmountInput);
+    wrapper.appendChild(row);
+
+    return {
+        container: wrapper,
+        getStart: () => startAmountInput.value,
+        getEnd: () => endAmountInput.value
+    }
+}
+
+function createDateRangeInputs() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'field-group';
+
+    const label = document.createElement('span');
+    label.className = 'field-label';
+    label.textContent = 'טווח תאריכים';
+    wrapper.appendChild(label);
+
+    const row = document.createElement('div');
+    row.className = 'range-group';
+
+    const startDateInput = document.createElement('input');
+    startDateInput.type = 'date';
+
+    const dash = document.createElement('span');
+    dash.className = 'range-dash';
+    dash.textContent = '—';
+
+    const endDateInput = document.createElement('input');
+    endDateInput.type = 'date';
+
+    row.appendChild(startDateInput);
+    row.appendChild(dash);
+    row.appendChild(endDateInput);
+    wrapper.appendChild(row);
+
+    return {
+        container: wrapper,
+        getStart: () => startDateInput.value,
+        getEnd: () => endDateInput.value
+    }
+}
+
+function createMissingFieldsSelect() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'field-group';
+
+    const label = document.createElement('span');
+    label.className = 'field-label';
+    label.textContent = 'הראה רק תנועות עם שדות חסרים';
+    wrapper.appendChild(label);
+
+    const select = document.createElement('select');
+    select.className = 'missing-select';
+    select.multiple = true;
+
+    const fieldsMap = { date: 'תאריך', amount: 'סכום', sender: 'שם', method: 'אמצעי', type: 'סוג' };
+    Object.entries(fieldsMap).forEach(([value, text]) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = text;
+        select.appendChild(option);
+    });
+
+    wrapper.appendChild(select);
+
+    return {
+        container: wrapper,
+        select: select,
+        getValues: () => Array.from(select.selectedOptions).map(o => o.value)
+    }
+}
+
+
+// ===== src/ui/resultsView.js =====
+// מציג את תוצאות השאילתות: טבלת רשומות, סכום כולל,
+// והתראה ברורה אם יש נתונים חסרים.
+
+function renderResult(result) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'result-wrapper';
+
+    const header = document.createElement('div');
+    header.className = 'result-header';
+
+    const title = document.createElement('span');
+    title.className = 'result-title';
+    title.textContent = 'תוצאות';
+    header.appendChild(title);
+
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.className = 'icon-btn';
+    closeButton.textContent = '×';
+    closeButton.addEventListener('click', () => wrapper.remove());
+    header.appendChild(closeButton);
+
+    wrapper.appendChild(header);
+
+    const summary = document.createElement('div');
+    summary.className = 'result-summary';
+    summary.innerHTML = `
+        <span>נמצאו ${result.count} תוצאות</span>
+        <span class="total">סה"כ: ${result.total}</span>
+    `;
+    wrapper.appendChild(summary);
+
+    const table = document.createElement('table');
+
+    const headerRow = document.createElement('tr');
+    const headersMap = { date: 'תאריך', amount: 'סכום', sender: 'שם', method: 'אמצעי', type: 'סוג', fileName: 'קובץ' };
+    Object.values(headersMap).forEach(text => {
+        const th = document.createElement('th');
+        th.textContent = text;
+        headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
+
+    result.data.forEach(r => {
+        const tr = document.createElement('tr');
+        Object.keys(headersMap).forEach(key => {
+            const td = document.createElement('td');
+            td.textContent = r[key] ?? '-';
+            if (key === 'type') td.classList.add(r[key]);
+            if (key === 'fileName') td.classList.add('file-name-col');
+            tr.appendChild(td);
+        });
+        table.appendChild(tr);
+    });
+
+    wrapper.appendChild(table);
+
+    
+    return wrapper;
+}
+
+
+// ===== src/ui/app.js =====
+// נקודת הכניסה של האפליקציה - מחבר בין כל שכבות ה-UI,
+// ומפעיל את סדר האתחול הראשוני של הדף.
+
+
+import { createFileUploadView } from './fileUploadView.js'
+import { createQueryFormView } from './quertFormView.js'
+import { renderResult } from './resultsView.js';
+import { runMultipleQueries, runQuery } from '../core/queryEngine.js';
+import { TransactionStore } from '../core/transavtionStore.js';
+
+
+console.log("הדף נטען בהתחלה");
+
+const transactionStore = new TransactionStore();
+
+const view = createFileUploadView((files => {
+    transactionStore.addTransactions(files)}),
+    ((fileName, fileView) => { transactionStore.removeFile(fileName);
+        fileView.remove();}),
+  () =>transactionStore.getAllFiles()
+);
+
+const view2 = createQueryFormView((criteriaList, resultContainer) => {  
+    const results = runQuery(transactionStore.getAllTransactions(), criteriaList);
+    resultContainer.innerHTML = '';
+    resultContainer.appendChild(renderResult(results))},
+    ()=>transactionStore.getUniqueMethods(),
+    ()=>transactionStore.getUniqueSenders()
+);
+
+
+document.body.appendChild(view)
+document.body.appendChild(view2)
+
+    </script>
+
+</body>
+
+</html>

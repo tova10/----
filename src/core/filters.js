@@ -32,4 +32,3 @@ export function filterByMissingFields(transactions, fields) {
         fields.every(field => t.emptyDetails.includes(field))
     );
 }
-
