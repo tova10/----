@@ -43,7 +43,9 @@ function normalizeRow(row, fileName) {
 }
 
 function findValueByHeaders(row, possibleHeaders) {
-    const header = possibleHeaders.find(h => h in row)
+    const keysRow = Object.keys(row)
+    const header = keysRow.find(k => possibleHeaders.some(h => k.toLowerCase().includes(h.toLowerCase())))
+   
     return row[header];
 }
 
@@ -57,8 +59,8 @@ function normaliedDate(date) {
     }
 
     if (typeof date === 'number') {
-        const excelDate = new Date(Date.UTC(1899, 11, 30+date));
-        return excelDate.toLocaleDateString('en-US',{timeZone:'UTC'});
+        const excelDate = new Date(Date.UTC(1899, 11, 30 + date));
+        return excelDate.toLocaleDateString('en-US', { timeZone: 'UTC' });
     }
 
     if (typeof date === 'string') {

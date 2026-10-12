@@ -5,11 +5,11 @@
 
 export const columnMapping = {
 
-    date : ["תאריך", "Posting Date"],
-    amount : ["   Amount   " , "Amount"],
-    sender : [" From / To  (Donor Co)"],
-    method : [" Payment type "],
-    type : ["Details"],
+    date : ["תאריך", "date"],
+    amount : ["amount"],
+    sender : ["from"],
+    method : ["type"],
+    type : ["details"],
     // description : ["Description"]
 
 
